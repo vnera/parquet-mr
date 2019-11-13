@@ -18,7 +18,7 @@ fi
 # Somehow, mvn is not on the path by default
 export PATH="$MAVEN3_HOME/bin:$PATH"
 
-CURRENT_BRANCH=cdh6.3.x
+CURRENT_BRANCH=cdh6.3.3
 
 # we need to re-run setup inside the docker container to get mvn-gbn script.
 SETUP_FILE="$(mktemp)"

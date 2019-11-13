@@ -4,13 +4,13 @@
   <parent>
     <groupId>com.cloudera.cdh</groupId>
     <artifactId>cdh-root</artifactId>
-    <version>6.3.x-SNAPSHOT</version>
+    <version>6.3.3</version>
     <relativePath></relativePath><!-- no parent resolution -->
   </parent>
 
   <groupId>org.apache.parquet</groupId>
   <artifactId>parquet</artifactId>
-  <version>1.9.0-cdh6.3.x-SNAPSHOT</version>
+  <version>1.9.0-cdh6.3.3</version>
   <packaging>pom</packaging>
 
   <name>Apache Parquet MR</name>
