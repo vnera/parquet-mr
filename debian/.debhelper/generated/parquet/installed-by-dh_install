@@ -1,0 +1,17 @@
+debian/tmp/usr/lib/parquet
+debian/tmp/usr/lib/hadoop/parquet-avro.jar
+debian/tmp/usr/lib/hadoop/parquet-cascading.jar
+debian/tmp/usr/lib/hadoop/parquet-cascading3.jar
+debian/tmp/usr/lib/hadoop/parquet-column.jar
+debian/tmp/usr/lib/hadoop/parquet-common.jar
+debian/tmp/usr/lib/hadoop/parquet-encoding.jar
+debian/tmp/usr/lib/hadoop/parquet-generator.jar
+debian/tmp/usr/lib/hadoop/parquet-hadoop-bundle.jar
+debian/tmp/usr/lib/hadoop/parquet-hadoop.jar
+debian/tmp/usr/lib/hadoop/parquet-jackson.jar
+debian/tmp/usr/lib/hadoop/parquet-pig-bundle.jar
+debian/tmp/usr/lib/hadoop/parquet-pig.jar
+debian/tmp/usr/lib/hadoop/parquet-protobuf.jar
+debian/tmp/usr/lib/hadoop/parquet-scala_2.11.jar
+debian/tmp/usr/lib/hadoop/parquet-thrift.jar
+debian/tmp/usr/bin/parquet-tools

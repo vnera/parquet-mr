@@ -1,0 +1,17 @@
+Package: parquet
+Version: 1.9.0+cdh6.3.2-1605554
+Architecture: all
+Maintainer: vRNI, VMware, Inc. <https://www.vmware.com/support>
+Installed-Size: 95027
+Depends: hadoop, parquet-format (>= 2.1.0), avro-libs, zookeeper, hadoop-yarn, hadoop-mapreduce, hadoop-hdfs, hadoop-client (>= 2.6.0+cdh5.4.0)
+Section: misc
+Priority: extra
+Homepage: https://parquet.io
+Description: A columnar storage format for Hadoop.
+ Parquet-MR contains the java implementation of the Parquet format. Parquet is
+ a columnar storage format for Hadoop; it provides efficient storage and
+ encoding of data. Parquet uses the record shredding and assembly algorithm
+ described in the Dremel paper to represent nested structures.
+ .
+ .
+ Built by vRNI, VMware, Inc.

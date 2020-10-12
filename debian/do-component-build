@@ -1,0 +1,77 @@
+#!/bin/bash
+set -x
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+set -ex
+CWD="$(dirname "$0")"
+
+# This file can be called in two ways. In the normal path, it is
+# invoked here as-is, and the build functions are over in the
+# templates directory.  As part of packaging, it is copied into a
+# package-specific directory along with the contents of the templates
+# directory, and so the build functions are in the currrent working
+# directory.
+FUNCTIONS1="${CWD}/../../templates/buildfuncs"
+FUNCTIONS2="${CWD}/buildfuncs"
+if [ -f "${FUNCTIONS1}" ]; then
+    . "${FUNCTIONS1}"
+elif [ -f "${FUNCTIONS2}" ]; then
+    . "${FUNCTIONS2}"
+else
+    echo "Unable to source ${FUNCTIONS1} or ${FUNCTIONS2}"
+    exit 1
+fi
+
+if [[ -z "${CAULDRON_PKG_BUILD_MVN_PHASE}" && -n "${CAULDRON_ROOT_DIR}" ]]; then
+  # We are in the package phase. Reuse the artifacts generated in the maven phase
+  # instead of compiling them from scratch.
+  cp -n -R ${CAULDRON_ROOT_DIR}/build/docker.common/build/cdh/parquet/*/source/* .
+  exit 0
+fi
+
+#PROTOC_CDH5_PATH=/opt/toolchain/protobuf-2.5.0/bin/protoc
+PROTOC_CDH5_PATH=/usr/local/bin/protoc #/opt/toolchain/protobuf-2.5.0/bin/protoc
+
+if [ -z "${DO_MAVEN_DEPLOY}" ]; then
+    MAVEN_INST_DEPLOY=install
+else
+    MAVEN_INST_DEPLOY=$DO_MAVEN_DEPLOY
+fi
+
+#THRIFT_HOME=/opt/toolchain/thrift-0.9.3
+THRIFT_HOME=/usr/local/thrift
+export PATH=${THRIFT_HOME}/bin:${PATH}
+
+# daymanc: append to mvn cmd larger number of unapproved licenses as a -D option: -Drat.numUnapprovedLicenses=100
+# [INFO] Apache Parquet MR .................................. FAILURE [  1.754 s]
+# ...
+# [INFO] ------------------------------------------------------------------------
+# [INFO] BUILD FAILURE
+# [INFO] ------------------------------------------------------------------------
+# [INFO] Total time:  2.179 s
+# [INFO] Finished at: 2020-09-23T02:41:22Z
+# [INFO] ------------------------------------------------------------------------
+# [ERROR] Failed to execute goal org.apache.rat:apache-rat-plugin:0.6:check (default) on project parquet: Too many unapproved licenses: 11 -> [Help 1]
+# org.apache.maven.lifecycle.LifecycleExecutionException: Failed to execute goal org.apache.rat:apache-rat-plugin:0.6:check (default) on project parquet: Too many unapproved licenses: 11
+#
+MAVEN_OPTS="-Xmx1536m -Xms256m -XX:MaxPermSize=256m" mvn $CAULDRON_MAVEN_EXTRA_ARGS source:jar-no-fork javadoc:jar $MAVEN_INST_DEPLOY -Drat.skip=true -Drat.ignoreErrors=true -Dprotoc.executable=${PROTOC_CDH5_PATH} -DskipTests -Drat.numUnapprovedLicenses=100
+# end
+
+rm -rf build parquet-${FULL_VERSION}
+ALL_FILES=`echo *`
+mkdir build parquet-${FULL_VERSION}
+cp -r $ALL_FILES parquet-${FULL_VERSION}
+tar --use-compress-program pigz -cf build/parquet-${FULL_VERSION}.tar.gz parquet-${FULL_VERSION}

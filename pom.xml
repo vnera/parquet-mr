@@ -521,6 +521,7 @@
             <exclude>thrift-${thrift.version}.tar.gz</exclude>
             <exclude>**/dependency-reduced-pom.xml</exclude>
             <exclude>cloudera/**</exclude>
+            <exclude>debian/**</exclude>
           </excludes>
         </configuration>
       </plugin>
